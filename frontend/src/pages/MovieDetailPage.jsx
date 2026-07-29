@@ -7,10 +7,14 @@ import StarRating from '../components/StarRating';
 import ReviewCard from '../components/ReviewCard';
 import toast from 'react-hot-toast';
 import { FaBookmark, FaRegBookmark, FaCalendarAlt, FaClock, FaStar, FaPlay, FaTimes } from 'react-icons/fa';
+import useAppStore from '../store/useAppStore';
+import { getT } from '../utils/i18n';
 
 export default function MovieDetailPage() {
   const { id } = useParams();
   const { isAuthenticated, user } = useAuthStore();
+  const { lang } = useAppStore();
+  const t = getT(lang);
   
   const [movie, setMovie] = useState(null);
   const [reviews, setReviews] = useState([]);
@@ -199,7 +203,7 @@ export default function MovieDetailPage() {
                   }`}
                 >
                   {watchlistStatus ? <FaBookmark /> : <FaRegBookmark />}
-                  {watchlistStatus ? 'In Watchlist' : 'Add to Watchlist'}
+                  {watchlistStatus ? t('inWatchlist') : t('addWatchlist')}
                 </button>
                 
                 {trailer && (
@@ -208,7 +212,7 @@ export default function MovieDetailPage() {
                     className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold dark:text-white text-slate-900 dark:bg-slate-800 bg-white/80 hover:bg-slate-700 backdrop-blur-sm border border-slate-600 transition-all hover:scale-105"
                   >
                     <FaPlay className="text-pink-500" />
-                    Play Trailer
+                    {t('playTrailer')}
                   </button>
                 )}
               </div>
@@ -222,14 +226,14 @@ export default function MovieDetailPage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-12">
             <section>
-              <h2 className="text-2xl font-bold dark:text-white text-slate-900 mb-4">Overview</h2>
+              <h2 className="text-2xl font-bold dark:text-white text-slate-900 mb-4">{t('overview')}</h2>
               <p className="dark:text-slate-300 text-slate-600 text-lg leading-relaxed">{movie.overview || "No overview available."}</p>
             </section>
 
             {/* Cast Carousel */}
             {movie.credits?.cast?.length > 0 && (
               <section className="pt-4 border-t dark:border-slate-800 border-slate-200">
-                <h2 className="text-2xl font-bold dark:text-white text-slate-900 mb-6">Top Billed Cast</h2>
+                <h2 className="text-2xl font-bold dark:text-white text-slate-900 mb-6">{t('cast')}</h2>
                 <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900">
                   {movie.credits.cast.slice(0, 10).map(actor => (
                     <div key={actor.id} className="min-w-[140px] w-[140px] dark:bg-slate-800 bg-white rounded-xl overflow-hidden shadow-lg snap-start flex-shrink-0">
@@ -256,13 +260,13 @@ export default function MovieDetailPage() {
 
             <section className="border-t dark:border-slate-800 border-slate-200 pt-12">
               <h2 className="text-2xl font-bold dark:text-white text-slate-900 mb-8 flex items-center gap-2">
-                Reviews <span className="dark:bg-slate-800 bg-white text-sm py-1 px-3 rounded-full">{reviews.length}</span>
+                {t('reviews')} <span className="dark:bg-slate-800 bg-white text-sm py-1 px-3 rounded-full">{reviews.length}</span>
               </h2>
               
               {/* Write Review Form */}
               {isAuthenticated ? (
                 <form onSubmit={submitReview} className="dark:bg-slate-800 bg-white/50 p-6 rounded-2xl border dark:border-slate-700 border-slate-300 mb-8 backdrop-blur-sm">
-                  <h3 className="font-semibold dark:text-white text-slate-900 mb-4">Write your review</h3>
+                  <h3 className="font-semibold dark:text-white text-slate-900 mb-4">{t('writeReview')}</h3>
                   <div className="mb-4">
                     <StarRating rating={rating} setRating={setRating} />
                   </div>
@@ -279,7 +283,7 @@ export default function MovieDetailPage() {
                       disabled={submittingReview}
                       className="bg-cyan-600 hover:bg-cyan-500 dark:text-white text-slate-900 font-bold py-2 px-6 rounded-lg transition-all shadow-lg shadow-cyan-500/20 disabled:opacity-50"
                     >
-                      {submittingReview ? 'Posting...' : 'Post Review'}
+                      {submittingReview ? t('posting') : t('postReview')}
                     </button>
                   </div>
                 </form>
@@ -308,25 +312,25 @@ export default function MovieDetailPage() {
           {/* Sidebar */}
           <div className="space-y-8">
             <div className="dark:bg-slate-800 bg-white/50 rounded-2xl p-6 border dark:border-slate-700 border-slate-300 backdrop-blur-sm">
-              <h3 className="font-bold dark:text-white text-slate-900 mb-4">Details</h3>
+              <h3 className="font-bold dark:text-white text-slate-900 mb-4">{t('details')}</h3>
               <dl className="space-y-4 text-sm">
                 <div>
-                  <dt className="text-slate-500">Status</dt>
+                  <dt className="text-slate-500">{t('status')}</dt>
                   <dd className="text-slate-200 font-medium">{movie.status}</dd>
                 </div>
                 <div>
-                  <dt className="text-slate-500">Original Language</dt>
+                  <dt className="text-slate-500">{t('language')}</dt>
                   <dd className="text-slate-200 font-medium uppercase">{movie.original_language}</dd>
                 </div>
                 {movie.budget > 0 && (
                   <div>
-                    <dt className="text-slate-500">Budget</dt>
+                    <dt className="text-slate-500">{t('budget')}</dt>
                     <dd className="text-slate-200 font-medium">${movie.budget.toLocaleString()}</dd>
                   </div>
                 )}
                 {movie.revenue > 0 && (
                   <div>
-                    <dt className="text-slate-500">Revenue</dt>
+                    <dt className="text-slate-500">{t('revenue')}</dt>
                     <dd className="text-slate-200 font-medium">${movie.revenue.toLocaleString()}</dd>
                   </div>
                 )}

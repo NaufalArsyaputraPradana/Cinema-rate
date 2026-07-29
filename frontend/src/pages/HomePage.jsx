@@ -4,8 +4,13 @@ import MovieCard from '../components/MovieCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { FaFire, FaRegStar, FaPlay, FaChevronDown } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import useAppStore from '../store/useAppStore';
+import { getT } from '../utils/i18n';
 
 export default function HomePage() {
+  const { lang } = useAppStore();
+  const t = getT(lang);
+  
   const [trending, setTrending] = useState([]);
   const [popular, setPopular] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -96,7 +101,7 @@ export default function HomePage() {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
               <div className="max-w-2xl animate-fade-in-up">
                 <span className="inline-block py-1 px-3 rounded-full bg-cyan-600/30 border border-cyan-500/50 text-cyan-400 text-xs font-bold tracking-widest uppercase mb-4 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
-                  #1 Trending Today
+                  #1 {t('trendingThisWeek')}
                 </span>
                 <h1 className="text-5xl md:text-7xl font-black dark:text-white text-slate-900 tracking-tight mb-4 drop-shadow-2xl">
                   {heroMovie.title}
@@ -109,7 +114,7 @@ export default function HomePage() {
                     to={`/movie/${heroMovie.id}`}
                     className="flex items-center gap-2 px-8 py-4 rounded-full bg-white text-slate-900 font-bold hover:bg-cyan-400 hover:text-slate-900 transition-all shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_40px_rgba(6,182,212,0.6)] hover:-translate-y-1"
                   >
-                    <FaPlay /> View Details
+                    <FaPlay /> {t('viewDetails')}
                   </Link>
                 </div>
               </div>
@@ -124,7 +129,7 @@ export default function HomePage() {
         <section className="mb-16">
           <div className="mb-6 flex items-center gap-2">
             <FaFire className="text-2xl text-orange-500 animate-pulse" />
-            <h2 className="text-2xl font-bold dark:text-white text-slate-900 tracking-tight">Trending This Week</h2>
+            <h2 className="text-2xl font-bold dark:text-white text-slate-900 tracking-tight">{t('trendingThisWeek')}</h2>
           </div>
           <div className="flex gap-6 overflow-x-auto pb-8 pt-4 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-cyan-700 scrollbar-track-slate-800/50">
             {trending.map(movie => (
@@ -140,7 +145,7 @@ export default function HomePage() {
           <div className="mb-8 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <FaRegStar className="text-2xl text-yellow-400" />
-              <h2 className="text-2xl font-bold dark:text-white text-slate-900 tracking-tight">Discover Popular</h2>
+              <h2 className="text-2xl font-bold dark:text-white text-slate-900 tracking-tight">{t('discoverPopular')}</h2>
             </div>
           </div>
           
@@ -163,7 +168,7 @@ export default function HomePage() {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    <span>Load More Movies</span>
+                    <span>{t('loadMore')}</span>
                     <FaChevronDown className="group-hover:translate-y-1 transition-transform" />
                   </>
                 )}
