@@ -1,4 +1,5 @@
 # backend/cinerate/settings.py
+import os
 import environ
 from pathlib import Path
 from datetime import timedelta
@@ -61,9 +62,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cinerate.wsgi.application'
 
-DATABASES = {
-    'default': env.db('DATABASE_URL')
-}
+if os.environ.get('VERCEL') == '1':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': '/tmp/db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': env.db('DATABASE_URL')
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
