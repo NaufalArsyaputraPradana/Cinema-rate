@@ -62,17 +62,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cinerate.wsgi.application'
 
-if os.environ.get('VERCEL') == '1':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': '/tmp/db.sqlite3',
-        }
-    }
-else:
-    DATABASES = {
-        'default': env.db('DATABASE_URL')
-    }
+DATABASES = {
+    'default': env.db('DATABASE_URL')
+}
+DATABASES['default']['OPTIONS'] = {
+    'ssl': {'ca': ''}
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
